@@ -1,0 +1,17 @@
+[project]
+name = "historical-data-stocks"
+version = "0.1.0"
+description = "NSE equity OHLCV data store — daily and 5min, Nifty 200"
+requires-python = ">=3.11"
+dependencies = [
+    "dhanhq>=2.2.0",
+    "pandas>=2.0",
+    "pyarrow>=14.0",
+    "duckdb>=0.10",
+    "python-dotenv>=1.0",
+    "truststore>=0.9",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
