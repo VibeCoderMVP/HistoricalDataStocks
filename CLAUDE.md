@@ -13,8 +13,10 @@ A self-contained data pipeline for Nifty 200 equity OHLCV history:
 | Layer | Source | Lookback | Storage |
 |---|---|---|---|
 | **Daily** | Dhan `historical_daily_data` | 5 years in 1 API call | `data/daily/{SYMBOL}.parquet` |
-| **5min** | Dhan `intraday_minute_data` | 5 years in 88-day chunks | `data/5min/{SYMBOL}.parquet` |
+| **5min** | Dhan `intraday_minute_data` (interval=5) | 5 years in 88-day chunks | `data/5min/{SYMBOL}.parquet` |
+| **1min** | Dhan `intraday_minute_data` (interval=1) | 5 years in 88-day chunks (confirmed live 2026-07-11) | `data/1min/{SYMBOL}.parquet` |
 | **Any other TF** | Rolled from 5min | Same as 5min | Not stored — computed on demand |
+| **Sector indices (5min)** | Dhan `intraday_minute_data`, `exchange_segment=IDX_I` | 5 years where available (see below) | `data/sector_5min/{SECTOR_NAME}.parquet` |
 
 Derived TFs (15min, 25min, 75min, 125min, or any N that is a multiple of 5) are
 computed by `rollup.py` with session-based bin anchoring at 09:15 IST. No separate
@@ -27,8 +29,11 @@ fetch or storage needed. Volume is always **summed** across constituent bars.
 ```
 HistoricalDataStocks/
 ├── instruments.py    — NIFTY_200 dict: symbol -> Dhan security_id
+│                        + SECTOR_INDICES dict: sector name -> Dhan security_id (IDX_I)
 ├── fetch_daily.py    — Download 5yr daily OHLCV (1 call/symbol)
 ├── fetch_5min.py     — Download 5yr 5min OHLCV (88-day chunks, resume-safe)
+├── fetch_1min.py     — Download 5yr 1min OHLCV (88-day chunks, resume-safe)
+├── fetch_sector_5min.py — Download 5yr 5min OHLCV for NSE sector indices (IDX_I segment)
 ├── rollup.py         — Resample 5min to any N-min TF; session-aligned to 09:15 IST
 ├── query.py          — Public API: daily(), intraday(), universe_daily(), to_csv()
 ├── pyproject.toml    — uv-managed dependencies
@@ -36,7 +41,9 @@ HistoricalDataStocks/
 │   └── nifty200.txt  — 200 NSE symbols, one per line
 └── data/
     ├── daily/        — {SYMBOL}.parquet  (~200 files, ~50 MB)
-    └── 5min/         — {SYMBOL}.parquet  (~200 files, ~2-3 GB)
+    ├── sector_5min/  — {SECTOR_NAME}.parquet (13 files, e.g. "NIFTY IT.parquet")
+    ├── 5min/         — {SYMBOL}.parquet  (~200 files, ~2-3 GB)
+    └── 1min/         — {SYMBOL}.parquet  (~200 files, ~1.5-2 GB est.)
 ```
 
 ---
@@ -51,6 +58,10 @@ uv run python fetch_daily.py
 
 # Step 2 — 5min bars for all 200 symbols (~18 minutes)
 uv run python fetch_5min.py
+
+# Step 3 (optional) — 1min bars for all 200 symbols (~18 min in API calls;
+# ~5x the row count of 5min, so allow more time for parquet writes)
+uv run python fetch_1min.py
 ```
 
 **Incremental refresh (run weekly or before a backtest):**
@@ -58,6 +69,7 @@ uv run python fetch_5min.py
 ```
 uv run python fetch_daily.py --force          # re-fetch all daily (1 min)
 uv run python fetch_5min.py --refresh         # fetch only new 5min bars
+uv run python fetch_1min.py --refresh         # fetch only new 1min bars
 ```
 
 **Single symbol:**
@@ -65,6 +77,7 @@ uv run python fetch_5min.py --refresh         # fetch only new 5min bars
 ```
 uv run python fetch_daily.py --symbol RELIANCE
 uv run python fetch_5min.py --symbol RELIANCE
+uv run python fetch_1min.py --symbol RELIANCE
 ```
 
 ---
@@ -200,6 +213,66 @@ When Nifty 500 coverage is needed:
 
 ---
 
+## Sector Indices (added 2026-07-12, GapDC-Test sector-correlation build)
+
+Dhan's instrument master (`https://images.dhan.co/api-data/api-scrip-master.csv`)
+lists every NSE sector index (NIFTY IT, NIFTY BANK, NIFTY METAL, NIFTY AUTO,
+NIFTY PHARMA, NIFTY FMCG, NIFTY REALTY, NIFTY MEDIA, NIFTY PSU BANK, NIFTY
+HEALTHCARE, NIFTY CONSUMER DURABLES, NIFTY OIL AND GAS, plus a NIFTY FINANCIAL
+SERVICES proxy — see caveat below) under `SEM_EXCH_INSTRUMENT_TYPE=INDEX`,
+`SEM_EXM_EXCH_ID=NSE`. This was previously assumed to be unavailable/unresearched
+— it is available, and fetchable through the exact same
+`dhanhq.intraday_minute_data()` call already used for equities, just with
+`exchange_segment="IDX_I"` / `instrument_type="INDEX"` (`dhanhq.dhanhq.INDEX =
+'IDX_I'`, a real package constant) instead of `NSE_EQ`/`EQUITY`.
+
+- **security_ids**: `instruments.py`'s `SECTOR_INDICES` dict, 13 sectors.
+- **OHLC fetch**: `fetch_sector_5min.py` (sibling to `fetch_5min.py`, same
+  chunking/resume-safe logic) → `data/sector_5min/{SECTOR_NAME}.parquet`.
+  4 of the 13 sectors (NIFTY FINANCIAL SERVICES proxy, NIFTY HEALTHCARE, NIFTY
+  CONSUMER DURABLES, NIFTY OIL AND GAS) only have Dhan history from 2024 onward
+  — these are newer index variants, not a fetch failure; trades/analysis before
+  each sector's own data-start date should be treated as unknown for that
+  sector, not backfilled or assumed flat.
+- **Constituent membership** (which equities belong to which sector — separate
+  from the OHLC above) comes from NSE's public archive, NOT from Dhan:
+  `https://nsearchives.nseindia.com/content/indices/ind_<name>list.csv`, same
+  fetch pattern already used once in this repo for `DC-Separate/symbols/
+  niftynext50.txt`. The parsed symbol→sector(s) map lives in
+  `D:\Trading\backtesting\GapDC-Test\symbols\sector_membership.json` (project-
+  local, not here, since only that project has consumed it so far — move it
+  here if a second project needs the same mapping). Covers 115 of this
+  project's 200 universe symbols; the other 85 (industrials, telecom, power,
+  cement, AMCs, new listings) aren't part of any of these 13 sectors.
+  **Filename gotchas** (NSE's URLs aren't perfectly systematic): financial
+  services is `ind_niftyfinancelist.csv`, NOT `ind_niftyfinancialserviceslist.csv`;
+  `ind_niftyprivatebanklist.csv` does not exist as a standalone file (private
+  banks are folded into `ind_niftybanklist.csv`). Verify with an HTTP status
+  check before assuming a guessed filename works.
+- **Caveat — "NIFTY FINANCIAL SERVICES" name mismatch**: Dhan does not expose
+  the classic full Financial Services index under that name in `IDX_I`. `NIFTY
+  FINSRV25 50` (security_id 469, a newer 25/50-stock derivatives-linked variant)
+  is used as the closest available OHLC proxy in `SECTOR_INDICES`, while
+  membership still comes from NSE's classic `ind_niftyfinancelist.csv`
+  constituent list — the OHLC series and the membership list are not from
+  perfectly matching index definitions for this one sector. Re-verify before
+  leaning on this sector specifically for anything precision-sensitive.
+- **What this does NOT cover**: no pre-market/pre-open (09:00-09:15 IST call
+  auction) index data has been investigated or fetched — `intraday_minute_data`
+  history above starts from the 09:15 regular session same as equities. No live
+  tick subscription for sector indices exists in TradingWebSockets' P1/P2 either
+  — this is historical-only, offline-backtest infrastructure so far. See
+  `reference_dhan_sector_index_data` and `reference_dhan_premarket_data` in
+  project memory for the live/pre-market research thread if picking this up.
+
+**Extending coverage**: the same instrument-master CSV has ~100 more niche/
+strategy indices (NIFTY INFRA, NIFTYPSE, NIFTY COMMODITIES, etc.) that could
+close some of the 85-symbol gap above — re-run the same
+filter-by-`SEM_EXCH_INSTRUMENT_TYPE=INDEX` approach, then check NSE for a
+matching constituent CSV before assuming one exists.
+
+---
+
 ## How Other Projects Use This
 
 **Pattern A — Read Parquet directly (no dependency):**
@@ -238,8 +311,15 @@ subprocess.run(["uv", "run", "--project", "D:/Trading/HistoricalDataStocks",
 
 ## Settled Decisions
 
-**#1 — Store only 5min, derive everything else.**
-No 15min/25min/75min/125min Parquets. Rollup on demand. Adding a new TF = zero fetch, zero storage.
+**#1 — Store only 5min, derive everything else (superseded 2026-07-01 for hot TFs).**
+Original rule: no 15/25/75/125min Parquets, rollup on demand. In practice, repeated
+on-demand rollup across 200 symbols is slow enough that hot TFs get precomputed and
+cached: `data/125min/` (built by `precompute_125min.py`) and, as of 2026-07-01,
+`data/15min/`, `data/25min/`, `data/75min/` (built by `precompute_tf.py --minutes N`,
+the generalized version). Same schema as 125min: `datetime, open, high, low, close,
+volume, symbol`. Re-run `precompute_tf.py --minutes N --refresh` after a 5min data
+refresh to keep these caches current. Any TF not in this list is still derived on
+demand via `rollup.py` — no need to precompute everything.
 
 **#2 — session-based binning, not pandas resample.**
 pandas resample with fixed origin drifts for non-1440-factor intervals. Session grouping is correct and simple.

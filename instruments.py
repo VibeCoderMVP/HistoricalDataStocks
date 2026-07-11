@@ -58,3 +58,33 @@ NIFTY_200: dict[str, str] = {
     "IRCTC": "13611", "MANKIND": "15380", "COLPAL": "15141", "UNITDSPR": "10447",
     "PIIND": "24184", "HUDCO": "20825", "TATAINVEST": "1621",
 }
+
+# Sector indices -- Dhan security_id under exchange_segment IDX_I, instrument_type
+# INDEX (confirmed live 2026-07-12 against Dhan's instrument-master CSV,
+# https://images.dhan.co/api-data/api-scrip-master.csv, filtered to
+# SEM_EXM_EXCH_ID=NSE, SEM_SEGMENT=I). Constituent membership for these comes from
+# NSE's public archive CSVs (https://nsearchives.nseindia.com/content/indices/
+# ind_<name>list.csv), same fetch pattern as DC-Separate's niftynext50.txt -- see
+# GapDC-Test/symbols/sector_membership.json for that mapping.
+#
+# NOTE on "NIFTY FINANCIAL SERVICES": Dhan does not expose the classic full
+# Financial Services index under that name -- "NIFTY FINSRV25 50" (a newer
+# 25/50-stock derivatives-linked variant) is the closest available OHLC proxy.
+# Membership in sector_membership.json still uses the classic NSE
+# ind_niftyfinancelist.csv constituent list; only the index-level OHLC series is
+# a proxy, not the exact same index NSE publishes membership for.
+SECTOR_INDICES: dict[str, str] = {
+    "NIFTY IT": "29",
+    "NIFTY BANK": "25",
+    "NIFTY AUTO": "14",
+    "NIFTY METAL": "31",
+    "NIFTY FINANCIAL SERVICES": "469",   # proxy: NIFTY FINSRV25 50 (see note above)
+    "NIFTY PHARMA": "32",
+    "NIFTY FMCG": "28",
+    "NIFTY REALTY": "34",
+    "NIFTY MEDIA": "30",
+    "NIFTY PSU BANK": "33",
+    "NIFTY HEALTHCARE": "447",
+    "NIFTY CONSUMER DURABLES": "466",
+    "NIFTY OIL AND GAS": "470",
+}
