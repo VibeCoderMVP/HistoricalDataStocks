@@ -42,6 +42,14 @@ from rollup import load_5min, rollup
 DATA_DAILY = Path(__file__).parent / "data" / "daily"
 DATA_5MIN  = Path(__file__).parent / "data" / "5min"
 
+# Symbols whose daily parquet is known-corrupted and NOT worth fixing (see
+# bug_hds_mothersonso_daily_duplicate_rows in project memory). Excluded from
+# universe_daily() by default so a fresh caller can't silently re-ingest this
+# and soil backtest results. Does NOT affect 5min/intraday stores, which don't
+# have this bug for this symbol. daily("MOTHERSON") still works directly (with
+# a warning) for anyone deliberately inspecting/fixing the raw file.
+KNOWN_BAD_DAILY_SYMBOLS = {"MOTHERSON"}
+
 
 # ── Daily TF ────────────────────────────────────────────────────────────────
 
@@ -54,6 +62,9 @@ def daily(
     path = DATA_DAILY / f"{symbol}.parquet"
     if not path.exists():
         raise FileNotFoundError(f"No daily data for {symbol}. Run fetch_daily.py first.")
+    if symbol in KNOWN_BAD_DAILY_SYMBOLS:
+        print(f"WARNING: {symbol}'s daily parquet has known duplicate/corrupted rows "
+              f"(see bug_hds_mothersonso_daily_duplicate_rows) — not fixed, use with caution.")
     df = pd.read_parquet(path)
     df["date"] = pd.to_datetime(df["date"])
     df = df.set_index("date")[["open", "high", "low", "close", "volume"]].sort_index()
@@ -68,17 +79,27 @@ def universe_daily(
     symbols: list[str] | None = None,
     from_date: str | None = None,
     to_date: str | None = None,
+    include_known_bad: bool = False,
 ) -> pd.DataFrame:
     """
     Load daily data for the full Nifty 200 (or a subset) in one DuckDB pass.
     Returns a flat DataFrame with columns: symbol, date, open, high, low, close, volume.
     Faster than calling daily() in a loop for large universes.
+
+    Excludes KNOWN_BAD_DAILY_SYMBOLS (currently just MOTHERSON — known duplicate/
+    corrupted daily rows, not fixed, not worth fixing) by default. One fewer
+    symbol out of 200 has no material effect on a universe-level backtest
+    decision; leaving it in silently would. Pass include_known_bad=True to
+    override (e.g. while working on the bug itself).
     """
     glob = str(DATA_DAILY / "*.parquet")
     where = []
     if symbols:
         sym_list = ", ".join(f"'{s}'" for s in symbols)
         where.append(f"symbol IN ({sym_list})")
+    if not include_known_bad and KNOWN_BAD_DAILY_SYMBOLS:
+        excl_list = ", ".join(f"'{s}'" for s in KNOWN_BAD_DAILY_SYMBOLS)
+        where.append(f"symbol NOT IN ({excl_list})")
     if from_date:
         where.append(f"date >= '{from_date}'")
     if to_date:

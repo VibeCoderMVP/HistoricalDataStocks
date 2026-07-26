@@ -1,0 +1,556 @@
+{
+  "360ONE": [
+    {
+      "date": "2023-03-02",
+      "combined_ratio": 0.25,
+      "actions": [
+        "Bonus 1:1",
+        "Face Value Split (Sub-Division) - From Rs 2/- Per Share To Re 1/- Per Share"
+      ]
+    }
+  ],
+  "ADANIPOWER": [
+    {
+      "date": "2025-09-22",
+      "combined_ratio": 0.2,
+      "actions": [
+        "Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 2/- Per Share"
+      ]
+    }
+  ],
+  "APLAPOLLO": [
+    {
+      "date": "2021-09-16",
+      "combined_ratio": 0.5,
+      "actions": [
+        "Bonus 1:1"
+      ]
+    }
+  ],
+  "ASHOKLEY": [
+    {
+      "date": "2025-07-16",
+      "combined_ratio": 0.5,
+      "actions": [
+        "Bonus 1:1"
+      ]
+    }
+  ],
+  "ASTRAL": [
+    {
+      "date": "2021-03-18",
+      "combined_ratio": 0.75,
+      "actions": [
+        "Bonus 1:3"
+      ]
+    },
+    {
+      "date": "2023-03-14",
+      "combined_ratio": 0.75,
+      "actions": [
+        "Bonus 1:3"
+      ]
+    }
+  ],
+  "AUBANK": [
+    {
+      "date": "2022-06-09",
+      "combined_ratio": 0.5,
+      "actions": [
+        "Bonus 1:1"
+      ]
+    }
+  ],
+  "BAJAJFINSV": [
+    {
+      "date": "2022-09-13",
+      "combined_ratio": 0.1,
+      "actions": [
+        "Face Value Split (Sub-Division) - From Rs 5/- Per Share To Re 1/- Per Share",
+        "Bonus 1:1"
+      ]
+    }
+  ],
+  "BAJFINANCE": [
+    {
+      "date": "2025-06-16",
+      "combined_ratio": 0.1,
+      "actions": [
+        "Face Value Split (Sub-Division) - From Rs 2/- Per Share To Re 1/- Per Share",
+        "Bonus 4:1"
+      ]
+    }
+  ],
+  "BDL": [
+    {
+      "date": "2024-05-24",
+      "combined_ratio": 0.5,
+      "actions": [
+        "Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 5/- Per Share"
+      ]
+    }
+  ],
+  "BEL": [
+    {
+      "date": "2022-09-15",
+      "combined_ratio": 0.3333,
+      "actions": [
+        "Bonus 2:1"
+      ]
+    }
+  ],
+  "BLUESTARCO": [
+    {
+      "date": "2023-06-20",
+      "combined_ratio": 0.5,
+      "actions": [
+        "Bonus 1:1"
+      ]
+    }
+  ],
+  "BPCL": [
+    {
+      "date": "2024-06-21",
+      "combined_ratio": 0.5,
+      "actions": [
+        "Bonus 1:1"
+      ]
+    }
+  ],
+  "BSE": [
+    {
+      "date": "2022-03-21",
+      "combined_ratio": 0.3333,
+      "actions": [
+        "Bonus 2:1"
+      ]
+    },
+    {
+      "date": "2025-05-23",
+      "combined_ratio": 0.3333,
+      "actions": [
+        "Bonus 2:1"
+      ]
+    }
+  ],
+  "CANBK": [
+    {
+      "date": "2024-05-15",
+      "combined_ratio": 0.2,
+      "actions": [
+        "Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 2/- Per Share"
+      ]
+    }
+  ],
+  "COCHINSHIP": [
+    {
+      "date": "2024-01-10",
+      "combined_ratio": 0.5,
+      "actions": [
+        "Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 5/- Per Share"
+      ]
+    }
+  ],
+  "COFORGE": [
+    {
+      "date": "2025-06-04",
+      "combined_ratio": 0.2,
+      "actions": [
+        "Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 2/- Per Share"
+      ]
+    }
+  ],
+  "CONCOR": [
+    {
+      "date": "2025-07-04",
+      "combined_ratio": 0.8,
+      "actions": [
+        "Bonus 1:4"
+      ]
+    }
+  ],
+  "DIXON": [
+    {
+      "date": "2021-03-18",
+      "combined_ratio": 0.2,
+      "actions": [
+        "Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 2/- Per Share"
+      ]
+    }
+  ],
+  "DRREDDY": [
+    {
+      "date": "2024-10-28",
+      "combined_ratio": 0.2,
+      "actions": [
+        "Face Value Split (Sub-Division) - From Rs 5/- Per Share To Re 1/- Per Share"
+      ]
+    }
+  ],
+  "GAIL": [
+    {
+      "date": "2022-09-06",
+      "combined_ratio": 0.6667,
+      "actions": [
+        "Bonus 1:2"
+      ]
+    }
+  ],
+  "GODFRYPHLP": [
+    {
+      "date": "2025-09-16",
+      "combined_ratio": 0.3333,
+      "actions": [
+        "Bonus 2:1"
+      ]
+    }
+  ],
+  "HAL": [
+    {
+      "date": "2023-09-28",
+      "combined_ratio": 0.5,
+      "actions": [
+        "Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 5/- Per Share"
+      ]
+    }
+  ],
+  "HDFCAMC": [
+    {
+      "date": "2025-11-26",
+      "combined_ratio": 0.5,
+      "actions": [
+        "Bonus 1:1"
+      ]
+    }
+  ],
+  "HDFCBANK": [
+    {
+      "date": "2025-08-26",
+      "combined_ratio": 0.5,
+      "actions": [
+        "Bonus 1:1"
+      ]
+    }
+  ],
+  "HINDPETRO": [
+    {
+      "date": "2024-06-21",
+      "combined_ratio": 0.6667,
+      "actions": [
+        "Bonus 1:2"
+      ]
+    }
+  ],
+  "IOC": [
+    {
+      "date": "2022-06-30",
+      "combined_ratio": 0.6667,
+      "actions": [
+        "Bonus 1:2"
+      ]
+    }
+  ],
+  "IRCTC": [
+    {
+      "date": "2021-10-28",
+      "combined_ratio": 0.2,
+      "actions": [
+        "Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 2/- Per Share"
+      ]
+    }
+  ],
+  "JUBLFOOD": [
+    {
+      "date": "2022-04-19",
+      "combined_ratio": 0.2,
+      "actions": [
+        "Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 2/- Per Share"
+      ]
+    }
+  ],
+  "KOTAKBANK": [
+    {
+      "date": "2026-01-14",
+      "combined_ratio": 0.2,
+      "actions": [
+        "Face Value Split (Sub-Division) - From Rs 5/- Per Share To Re 1/- Per Share"
+      ]
+    }
+  ],
+  "LODHA": [
+    {
+      "date": "2023-05-31",
+      "combined_ratio": 0.5,
+      "actions": [
+        "Bonus 1:1"
+      ]
+    }
+  ],
+  "MAZDOCK": [
+    {
+      "date": "2024-12-27",
+      "combined_ratio": 0.5,
+      "actions": [
+        "Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 5/- Per Share"
+      ]
+    }
+  ],
+  "MCX": [
+    {
+      "date": "2026-01-02",
+      "combined_ratio": 0.2,
+      "actions": [
+        "Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 2/- Per Share"
+      ]
+    }
+  ],
+  "MOTHERSON": [
+    {
+      "date": "2022-10-03",
+      "combined_ratio": 0.6667,
+      "actions": [
+        "Bonus 1:2"
+      ]
+    },
+    {
+      "date": "2025-07-18",
+      "combined_ratio": 0.6667,
+      "actions": [
+        "Bonus 1:2"
+      ]
+    }
+  ],
+  "MOTILALOFS": [
+    {
+      "date": "2024-06-10",
+      "combined_ratio": 0.25,
+      "actions": [
+        "Bonus 3:1"
+      ]
+    }
+  ],
+  "NAUKRI": [
+    {
+      "date": "2025-05-07",
+      "combined_ratio": 0.2,
+      "actions": [
+        "Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 2/- Per Share"
+      ]
+    }
+  ],
+  "NESTLEIND": [
+    {
+      "date": "2024-01-05",
+      "combined_ratio": 0.1,
+      "actions": [
+        "Face Value Split (Sub-Division) - From Rs10/- Per Share To Re 1/- Per Share"
+      ]
+    },
+    {
+      "date": "2025-08-08",
+      "combined_ratio": 0.5,
+      "actions": [
+        "Bonus 1:1"
+      ]
+    }
+  ],
+  "NMDC": [
+    {
+      "date": "2024-12-27",
+      "combined_ratio": 0.3333,
+      "actions": [
+        "Bonus 2:1"
+      ]
+    }
+  ],
+  "NYKAA": [
+    {
+      "date": "2022-11-10",
+      "combined_ratio": 0.1667,
+      "actions": [
+        "Bonus 5:1"
+      ]
+    }
+  ],
+  "OIL": [
+    {
+      "date": "2024-07-02",
+      "combined_ratio": 0.6667,
+      "actions": [
+        "Bonus 1:2"
+      ]
+    }
+  ],
+  "PATANJALI": [
+    {
+      "date": "2025-09-11",
+      "combined_ratio": 0.3333,
+      "actions": [
+        "Bonus 2:1"
+      ]
+    }
+  ],
+  "PERSISTENT": [
+    {
+      "date": "2024-03-28",
+      "combined_ratio": 0.5,
+      "actions": [
+        "Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 5/- Per Share"
+      ]
+    }
+  ],
+  "PFC": [
+    {
+      "date": "2023-09-21",
+      "combined_ratio": 0.8,
+      "actions": [
+        "Bonus 1:4"
+      ]
+    }
+  ],
+  "PHOENIXLTD": [
+    {
+      "date": "2024-09-20",
+      "combined_ratio": 0.5,
+      "actions": [
+        "Bonus 1:1"
+      ]
+    }
+  ],
+  "PIDILITIND": [
+    {
+      "date": "2025-09-23",
+      "combined_ratio": 0.5,
+      "actions": [
+        "Bonus 1:1"
+      ]
+    }
+  ],
+  "POWERGRID": [
+    {
+      "date": "2021-07-29",
+      "combined_ratio": 0.75,
+      "actions": [
+        "Bonus 1:3"
+      ]
+    },
+    {
+      "date": "2023-09-12",
+      "combined_ratio": 0.75,
+      "actions": [
+        "Bonus 1:3"
+      ]
+    }
+  ],
+  "RECLTD": [
+    {
+      "date": "2022-08-17",
+      "combined_ratio": 0.75,
+      "actions": [
+        "Bonus 1:3"
+      ]
+    }
+  ],
+  "RELIANCE": [
+    {
+      "date": "2024-10-28",
+      "combined_ratio": 0.5,
+      "actions": [
+        "Bonus 1:1"
+      ]
+    }
+  ],
+  "SHRIRAMFIN": [
+    {
+      "date": "2025-01-10",
+      "combined_ratio": 0.2,
+      "actions": [
+        "Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 2/- Per Share"
+      ]
+    }
+  ],
+  "SRF": [
+    {
+      "date": "2021-10-13",
+      "combined_ratio": 0.2,
+      "actions": [
+        "Bonus 4:1"
+      ]
+    }
+  ],
+  "TATAINVEST": [
+    {
+      "date": "2025-10-14",
+      "combined_ratio": 0.1,
+      "actions": [
+        "Face Value Split (Sub-Division) - From Rs 10/- Per Share To Re 1/- Per Share"
+      ]
+    }
+  ],
+  "TATASTEEL": [
+    {
+      "date": "2022-07-28",
+      "combined_ratio": 0.1,
+      "actions": [
+        "Face Value Split (Sub-Division) - From Rs 10/- Per Share To Re 1/- Per Share"
+      ]
+    }
+  ],
+  "TORNTPHARM": [
+    {
+      "date": "2022-07-08",
+      "combined_ratio": 0.5,
+      "actions": [
+        "Bonus 1:1"
+      ]
+    }
+  ],
+  "TRENT": [
+    {
+      "date": "2026-06-04",
+      "combined_ratio": 0.6667,
+      "actions": [
+        "Bonus 1:2"
+      ]
+    }
+  ],
+  "VBL": [
+    {
+      "date": "2021-06-10",
+      "combined_ratio": 0.6667,
+      "actions": [
+        "Bonus 1:2"
+      ]
+    },
+    {
+      "date": "2022-06-06",
+      "combined_ratio": 0.6667,
+      "actions": [
+        "Bonus 1:2"
+      ]
+    },
+    {
+      "date": "2023-06-15",
+      "combined_ratio": 0.5,
+      "actions": [
+        "Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 5/- Per Share"
+      ]
+    },
+    {
+      "date": "2024-09-12",
+      "combined_ratio": 0.4,
+      "actions": [
+        "Face Value Split (Sub-Division) - From Rs 5/- Per Share To Rs 2/- Per Share"
+      ]
+    }
+  ],
+  "WIPRO": [
+    {
+      "date": "2024-12-03",
+      "combined_ratio": 0.5,
+      "actions": [
+        "Bonus 1:1"
+      ]
+    }
+  ]
+}

@@ -110,10 +110,13 @@ BASE = "D:/Trading/HistoricalDataStocks"
 df = pd.read_parquet(f"{BASE}/data/daily/RELIANCE.parquet")
 
 # Full Nifty 200 daily — DuckDB single pass
+# NOTE: MOTHERSON has known-corrupted daily data (duplicate rows, see Known
+# Limitations below) — excluded here explicitly since this glob bypasses
+# query.py's automatic exclusion.
 df = duckdb.query(f"""
     SELECT symbol, date, open, high, low, close, volume
     FROM read_parquet('{BASE}/data/daily/*.parquet')
-    WHERE date >= '2024-01-01'
+    WHERE date >= '2024-01-01' AND symbol != 'MOTHERSON'
     ORDER BY symbol, date
 """).df()
 ```
@@ -303,7 +306,20 @@ subprocess.run(["uv", "run", "--project", "D:/Trading/HistoricalDataStocks",
 ## Known Limitations
 
 - **Nifty 500:** Not yet built. Only Nifty 200 (from `TradingWebSockets/config/settings.py` NIFTY_200_SECURITY_MAP).
-- **Corporate actions:** No dividend/split adjustment. Raw Dhan prices only.
+- **Corporate actions:** the **daily** store IS split/bonus-adjusted throughout its history
+  (confirmed 2026-07-26 against NSE's real corporate-action ex-dates via
+  `fetch_corporate_actions.py` — no price discontinuity at any confirmed split/bonus date).
+  The **intraday** stores (5min and derived 15/25/75/125min) are NOT adjusted before a
+  corporate action — see `bug_hds_5min_daily_split_adjustment_mismatch` in project memory.
+  Any backtest that mixes a daily/longer-TF structural signal with an intraday execution
+  clock is exposed to this; a pure daily-TF backtest is not.
+- **MOTHERSON daily data is corrupted — excluded by default, do not re-add:** 704 duplicate-date
+  rows (57% of its history) at two conflicting price scales ~1.35x apart. Not worth fixing
+  (one symbol out of 200 doesn't materially change a universe-level backtest decision).
+  `query.py`'s `universe_daily()` excludes it automatically (`KNOWN_BAD_DAILY_SYMBOLS`); `daily()`
+  still allows direct access with a warning. **If reading `data/daily/*.parquet` directly**
+  (Pattern A below, bypassing `query.py`) **you must filter it out yourself** — the exclusion
+  only exists in `query.py`. See `bug_hds_mothersonso_daily_duplicate_rows` in project memory.
 - **Survivorship bias:** Symbols reflect current Nifty 200 composition. Delisted or replaced stocks are not included.
 - **5min weekends/holidays:** Dhan returns empty for non-trading days. Gaps are natural — no rows for those dates.
 

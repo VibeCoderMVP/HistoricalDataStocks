@@ -73,6 +73,13 @@ NIFTY_200: dict[str, str] = {
 # Membership in sector_membership.json still uses the classic NSE
 # ind_niftyfinancelist.csv constituent list; only the index-level OHLC series is
 # a proxy, not the exact same index NSE publishes membership for.
+# Broad-market indices -- same IDX_I/INDEX pattern as SECTOR_INDICES below.
+# NIFTY_SECURITY_ID = "13" is the same constant already used in
+# NiftyOptionsBacktest/src/config.py for the options underlying.
+BROAD_INDICES: dict[str, str] = {
+    "NIFTY 50": "13",
+}
+
 SECTOR_INDICES: dict[str, str] = {
     "NIFTY IT": "29",
     "NIFTY BANK": "25",

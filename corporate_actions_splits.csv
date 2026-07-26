@@ -1,0 +1,69 @@
+bcEndDate,bcStartDate,caBroadcastDate,comp,exDate,faceVal,ind,isin,ndEndDate,ndStartDate,recDate,series,subject,symbol,ratio,kind
+-,-,,360 ONE WAM LIMITED,02-Mar-2023,1,-,INE466L01020,-,-,02-Mar-2023,EQ,Bonus 1:1,360ONE,0.5,bonus
+-,-,,360 ONE WAM LIMITED,02-Mar-2023,1,-,INE466L01020,-,-,02-Mar-2023,EQ,Face Value Split (Sub-Division) - From Rs 2/- Per Share To Re 1/- Per Share,360ONE,0.5,split
+-,-,,Adani Power Limited,22-Sep-2025,2,-,INE814H01011,-,-,22-Sep-2025,EQ,Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 2/- Per Share,ADANIPOWER,0.2,split
+-,-,,APL Apollo Tubes Limited,16-Sep-2021,2,-,INE702C01019,-,-,18-Sep-2021,EQ, Bonus 1:1,APLAPOLLO,0.5,bonus
+-,-,,Ashok Leyland Limited,16-Jul-2025,1,-,INE208A01029,-,-,16-Jul-2025,EQ,Bonus 1:1,ASHOKLEY,0.5,bonus
+-,-,,Astral Limited,18-Mar-2021,1,-,INE006I01012,-,-,19-Mar-2021,EQ, Bonus 1:3,ASTRAL,0.75,bonus
+-,-,,Astral Limited,14-Mar-2023,1,-,INE006I01012,-,-,14-Mar-2023,EQ,Bonus 1:3,ASTRAL,0.75,bonus
+-,-,,AU Small Finance Bank Limited,09-Jun-2022,10,-,INE949L01017,-,-,10-Jun-2022,EQ,Bonus 1:1,AUBANK,0.5,bonus
+-,-,,Bajaj Finserv Limited,13-Sep-2022,1,-,INE918I01018,-,-,14-Sep-2022,EQ,Face Value Split (Sub-Division) - From Rs 5/- Per Share To Re 1/- Per Share,BAJAJFINSV,0.2,split
+-,-,,Bajaj Finserv Limited,13-Sep-2022,1,-,INE918I01018,-,-,14-Sep-2022,EQ,Bonus 1:1,BAJAJFINSV,0.5,bonus
+-,-,,Bajaj Finance Limited,16-Jun-2025,1,-,INE296A01016,-,-,16-Jun-2025,EQ,Face Value Split (Sub-Division) - From Rs 2/- Per Share To Re 1/- Per Share,BAJFINANCE,0.5,split
+-,-,,Bajaj Finance Limited,16-Jun-2025,1,-,INE296A01016,-,-,16-Jun-2025,EQ,Bonus 4:1,BAJFINANCE,0.2,bonus
+-,-,,Bharat Dynamics Limited,24-May-2024,5,-,INE171Z01018,-,-,24-May-2024,EQ,Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 5/- Per Share,BDL,0.5,split
+-,-,,Bharat Electronics Limited,15-Sep-2022,1,-,INE263A01016,-,-,16-Sep-2022,EQ,Bonus 2:1,BEL,0.3333333333333333,bonus
+-,-,,Blue Star Limited,20-Jun-2023,2,-,INE472A01039,-,-,20-Jun-2023,EQ,Bonus 1:1,BLUESTARCO,0.5,bonus
+-,-,,Bharat Petroleum Corporation Limited,21-Jun-2024,10,-,INE029A01011,-,-,22-Jun-2024,EQ,Bonus 1:1,BPCL,0.5,bonus
+-,-,,Britannia Industries Limited,25-May-2021,1,-,INE216A01014,-,-,27-May-2021,EQ, Scheme Of Arangement- Bonus - 1 Debenture For 1 Equity Share Held,BRITANNIA,,unparsed
+-,-,,BSE Limited,21-Mar-2022,2,-,INE118H01025,-,-,22-Mar-2022,EQ,Bonus 2:1,BSE,0.3333333333333333,bonus
+-,-,,BSE Limited,23-May-2025,2,-,INE118H01025,-,-,23-May-2025,EQ,Bonus 2:1,BSE,0.3333333333333333,bonus
+-,-,,Canara Bank,15-May-2024,2,-,INE476A01014,-,-,15-May-2024,EQ,Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 2/- Per Share,CANBK,0.2,split
+-,-,,Cochin Shipyard Limited,10-Jan-2024,5,-,INE704P01017,-,-,10-Jan-2024,EQ,Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 5/- Per Share,COCHINSHIP,0.5,split
+-,-,,Coforge Limited,04-Jun-2025,2,-,INE591G01017,-,-,04-Jun-2025,EQ,Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 2/- Per Share,COFORGE,0.2,split
+-,-,,Container Corporation of India Limited,04-Jul-2025,5,-,INE111A01017,-,-,04-Jul-2025,EQ,Bonus 1:4,CONCOR,0.8,bonus
+-,-,,Dixon Technologies (India) Limited,18-Mar-2021,2,-,INE935N01012,-,-,19-Mar-2021,EQ, Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 2/- Per Share,DIXON,0.2,split
+-,-,,Dr. Reddy's Laboratories Limited,28-Oct-2024,1,-,INE089A01023,-,-,28-Oct-2024,EQ,Face Value Split (Sub-Division) - From Rs 5/- Per Share To Re 1/- Per Share,DRREDDY,0.2,split
+-,-,,GAIL (India) Limited,06-Sep-2022,10,-,INE129A01019,-,-,07-Sep-2022,EQ,Bonus 1:2,GAIL,0.6666666666666666,bonus
+-,-,,Godfrey Phillips India Limited,16-Sep-2025,2,-,INE260B01010,-,-,16-Sep-2025,EQ,Bonus 2:1,GODFRYPHLP,0.3333333333333333,bonus
+-,-,,Hindustan Aeronautics Limited,28-Sep-2023,5,-,INE066F01012,-,-,29-Sep-2023,EQ,Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 5/- Per Share,HAL,0.5,split
+-,-,,HDFC Asset Management Company Limited,26-Nov-2025,5,-,INE127D01025,-,-,26-Nov-2025,EQ,Bonus 1:1,HDFCAMC,0.5,bonus
+-,-,,HDFC Bank Limited,26-Aug-2025,1,-,INE040A01018,-,-,27-Aug-2025,EQ,Bonus 1:1,HDFCBANK,0.5,bonus
+-,-,,Hindustan Petroleum Corporation Limited,21-Jun-2024,10,-,INE094A01015,-,-,21-Jun-2024,EQ,Bonus 1:2,HINDPETRO,0.6666666666666666,bonus
+-,-,,Indian Oil Corporation Limited,30-Jun-2022,10,-,INE242A01010,-,-,01-Jul-2022,EQ,Bonus 1:2,IOC,0.6666666666666666,bonus
+-,-,,Indian Railway Catering And Tourism Corporation Limited,28-Oct-2021,2,-,INE335Y01012,-,-,29-Oct-2021,EQ, Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 2/- Per Share,IRCTC,0.2,split
+-,-,,Jubilant Foodworks Limited,19-Apr-2022,2,-,INE797F01012,-,-,20-Apr-2022,EQ,Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 2/- Per Share,JUBLFOOD,0.2,split
+-,-,,Kotak Mahindra Bank Limited,14-Jan-2026,1,-,INE237A01010,-,-,14-Jan-2026,EQ,Face Value Split (Sub-Division) - From Rs 5/- Per Share To Re 1/- Per Share,KOTAKBANK,0.2,split
+-,-,,Lodha Developers Limited,31-May-2023,10,-,INE670K01029,-,-,31-May-2023,EQ,Bonus 1:1,LODHA,0.5,bonus
+-,-,,Mazagon Dock Shipbuilders Limited,27-Dec-2024,5,-,INE249Z01012,-,-,27-Dec-2024,EQ,Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 5/- Per Share,MAZDOCK,0.5,split
+-,-,,Multi Commodity Exchange of India Limited,02-Jan-2026,2,-,INE745G01035,-,-,02-Jan-2026,EQ,Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 2/- Per Share,MCX,0.2,split
+-,-,,Samvardhana Motherson International Limited,03-Oct-2022,1,-,INE775A01035,-,-,05-Oct-2022,EQ,Bonus 1:2,MOTHERSON,0.6666666666666666,bonus
+-,-,,Samvardhana Motherson International Limited,18-Jul-2025,1,-,INE775A01035,-,-,18-Jul-2025,EQ,Bonus 1:2,MOTHERSON,0.6666666666666666,bonus
+-,-,,Motilal Oswal Financial Services Limited,10-Jun-2024,1,-,INE338I01027,-,-,10-Jun-2024,EQ,Bonus 3:1,MOTILALOFS,0.25,bonus
+-,-,,Info Edge (India) Limited,07-May-2025,2,-,INE663F01024,-,-,07-May-2025,EQ,Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 2/- Per Share,NAUKRI,0.2,split
+-,-,,Nestle India Limited,05-Jan-2024,1,-,INE239A01016,-,-,05-Jan-2024,EQ,Face Value Split (Sub-Division) - From Rs10/- Per Share To Re 1/- Per Share,NESTLEIND,0.1,split
+-,-,,Nestle India Limited,08-Aug-2025,1,-,INE239A01016,-,-,08-Aug-2025,EQ,Bonus 1:1,NESTLEIND,0.5,bonus
+-,-,,NMDC Limited,27-Dec-2024,1,-,INE584A01023,-,-,27-Dec-2024,EQ,Bonus 2:1,NMDC,0.3333333333333333,bonus
+-,-,,FSN E-Commerce Ventures Limited,10-Nov-2022,1,-,INE388Y01029,-,-,11-Nov-2022,EQ,Bonus 5:1,NYKAA,0.16666666666666666,bonus
+-,-,,Oil India Limited,02-Jul-2024,10,-,INE274J01014,-,-,02-Jul-2024,EQ,Bonus 1:2,OIL,0.6666666666666666,bonus
+-,-,,Patanjali Foods Limited,11-Sep-2025,2,-,INE619A01035,-,-,11-Sep-2025,EQ,Bonus 2:1,PATANJALI,0.3333333333333333,bonus
+-,-,,Persistent Systems Limited,28-Mar-2024,5,-,INE262H01013,-,-,01-Apr-2024,EQ,Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 5/- Per Share,PERSISTENT,0.5,split
+-,-,,Power Finance Corporation Limited,21-Sep-2023,10,-,INE134E01011,-,-,21-Sep-2023,EQ,Bonus 1:4,PFC,0.8,bonus
+-,-,,The Phoenix Mills Limited,20-Sep-2024,2,-,INE211B01039,-,-,21-Sep-2024,EQ,Bonus 1:1,PHOENIXLTD,0.5,bonus
+-,-,,Pidilite Industries Limited,23-Sep-2025,1,-,INE318A01026,-,-,23-Sep-2025,EQ,Bonus 1:1,PIDILITIND,0.5,bonus
+-,-,,Power Grid Corporation of India Limited,29-Jul-2021,10,-,INE752E01010,-,-,30-Jul-2021,EQ, Bonus 1:3,POWERGRID,0.75,bonus
+-,-,,Power Grid Corporation of India Limited,12-Sep-2023,10,-,INE752E01010,-,-,12-Sep-2023,EQ,Bonus 1:3,POWERGRID,0.75,bonus
+-,-,,REC Limited,17-Aug-2022,10,-,INE020B01018,-,-,18-Aug-2022,EQ,Bonus 1:3,RECLTD,0.75,bonus
+-,-,,Reliance Industries Limited,28-Oct-2024,10,-,INE002A01018,-,-,28-Oct-2024,EQ,Bonus 1:1,RELIANCE,0.5,bonus
+-,-,,Shriram Finance Limited,10-Jan-2025,2,-,INE721A01013,-,-,10-Jan-2025,EQ,Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 2/- Per Share,SHRIRAMFIN,0.2,split
+-,-,,SRF Limited,13-Oct-2021,10,-,INE647A01010,-,-,14-Oct-2021,EQ, Bonus 4:1,SRF,0.2,bonus
+-,-,,Tata Investment Corporation Limited,14-Oct-2025,1,-,INE672A01018,-,-,14-Oct-2025,EQ,Face Value Split (Sub-Division) - From Rs 10/- Per Share To Re 1/- Per Share,TATAINVEST,0.1,split
+-,-,,Tata Steel Limited,28-Jul-2022,1,-,INE081A01012,-,-,29-Jul-2022,EQ,Face Value Split (Sub-Division) - From Rs 10/- Per Share To Re 1/- Per Share,TATASTEEL,0.1,split
+-,-,,Torrent Pharmaceuticals Limited,08-Jul-2022,5,-,INE685A01028,-,-,11-Jul-2022,EQ,Bonus 1:1,TORNTPHARM,0.5,bonus
+-,-,,Trent Limited,04-Jun-2026,1,-,INE849A01012,-,-,04-Jun-2026,EQ,Bonus 1:2,TRENT,0.6666666666666666,bonus
+-,-,,TVS Motor Company Limited,25-Aug-2025,1,-,INE494B01015,-,-,25-Aug-2025,EQ,Scheme Of Arrangement - Bonus Ncrps 4:1,TVSMOTOR,,unparsed
+-,-,,Varun Beverages Limited,10-Jun-2021,2,-,INE200M01013,-,-,12-Jun-2021,EQ, Bonus 1:2,VBL,0.6666666666666666,bonus
+-,-,,Varun Beverages Limited,06-Jun-2022,2,-,INE200M01013,-,-,07-Jun-2022,EQ,Bonus 1:2,VBL,0.6666666666666666,bonus
+-,-,,Varun Beverages Limited,15-Jun-2023,2,-,INE200M01013,-,-,15-Jun-2023,EQ,Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 5/- Per Share,VBL,0.5,split
+-,-,,Varun Beverages Limited,12-Sep-2024,2,-,INE200M01013,-,-,12-Sep-2024,EQ,Face Value Split (Sub-Division) - From Rs 5/- Per Share To Rs 2/- Per Share,VBL,0.4,split
+-,-,,Wipro Limited,03-Dec-2024,2,-,INE075A01022,-,-,03-Dec-2024,EQ,Bonus 1:1,WIPRO,0.5,bonus
