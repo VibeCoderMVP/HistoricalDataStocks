@@ -322,6 +322,18 @@ subprocess.run(["uv", "run", "--project", "D:/Trading/HistoricalDataStocks",
   only exists in `query.py`. See `bug_hds_mothersonso_daily_duplicate_rows` in project memory.
 - **Survivorship bias:** Symbols reflect current Nifty 200 composition. Delisted or replaced stocks are not included.
 - **5min weekends/holidays:** Dhan returns empty for non-trading days. Gaps are natural — no rows for those dates.
+- **`data/daily/*.parquet` is a true rolling 5-year window, not an accumulating archive
+  (clarified 2026-07-27).** `fetch_daily.py --force` calls `df.to_parquet(out, index=False)` —
+  a full overwrite of each symbol's file with only the freshly-fetched `today - 5yrs` to `today`
+  range, no merge with whatever was there before. Anything older than 5 years back silently
+  drops out of this store as time passes. This is fine for HDS's own direct consumers (5yr is
+  the documented lookback everywhere), but matters for `trading_core.daily_bars.DailyBarStore`
+  (`daily_bars.duckdb`), which treats this parquet as an authoritative daily-TF overlay run
+  fresh every day (see `trading_core/CLAUDE.md`'s "Daily Bars Store" section) — that consumer
+  only ever upserts, never deletes, so its own history keeps accumulating past 5 years even as
+  this store's own rolling window moves forward; data older than 5 years simply stops being
+  re-verified/re-adjusted against Dhan going forward (it was already correctly adjusted while it
+  was still in-window, so this is a boundary to be aware of, not an active risk).
 
 ---
 
