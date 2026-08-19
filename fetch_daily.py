@@ -50,18 +50,32 @@ def _client() -> dhanhq:
     return dhanhq(ctx)
 
 
-def fetch_one(client: dhanhq, symbol: str, security_id: str, years: int = 5) -> pd.DataFrame | None:
+def fetch_one(
+    client: dhanhq, symbol: str, security_id: str, years: int = 5, retries: int = 3
+) -> pd.DataFrame | None:
     today = datetime.now().strftime("%Y-%m-%d")
     from_date = (datetime.now() - timedelta(days=years * 365)).strftime("%Y-%m-%d")
-    r = client.historical_daily_data(
-        security_id=security_id,
-        exchange_segment="NSE_EQ",
-        instrument_type="EQUITY",
-        from_date=from_date,
-        to_date=today,
-        expiry_code=0,
-    )
+
+    r = None
+    for attempt in range(1, retries + 1):
+        r = client.historical_daily_data(
+            security_id=security_id,
+            exchange_segment="NSE_EQ",
+            instrument_type="EQUITY",
+            from_date=from_date,
+            to_date=today,
+            expiry_code=0,
+        )
+        if r.get("status") == "success" and isinstance(r.get("data"), dict):
+            break
+        if attempt < retries:
+            print(f"    {symbol}: attempt {attempt}/{retries} failed "
+                  f"({r.get('remarks') or r.get('data')}) — retrying...")
+            time.sleep(1.0)
+
     if r.get("status") != "success" or not isinstance(r.get("data"), dict):
+        print(f"    {symbol}: giving up after {retries} attempts "
+              f"({r.get('remarks') or r.get('data')})")
         return None
     data = r["data"]
     df = pd.DataFrame({

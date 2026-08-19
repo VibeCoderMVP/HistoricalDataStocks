@@ -94,6 +94,32 @@ uv run python fetch_1min.py --symbol RELIANCE
 
 Scripts sleep 0.25s between calls (4 req/sec — safely under limit).
 
+**The 5 req/sec limit is account-wide, not per-process (confirmed live 2026-08-19).**
+`fetch_daily.py`'s 4 req/sec budget only accounts for itself — it does not know about
+(or coordinate with) any other Dhan-calling process sharing the same
+`DHAN_ACCESS_TOKEN`. Running `INGEST_DAILY_BARS.bat`/`fetch_daily.py --force` while any
+live fleet poller is also active on Dhan (most commonly `TradingCommodities`' P1C, which
+polls MCX every ~4.5min through its own 23:55 session end — see
+`trading_core/CLAUDE.md`'s "Daily Bars Store" section for the ingestion pipeline this
+feeds) can push the combined call rate over 5/sec and produce real `DH-904 Rate_Limit`
+rejections on this script's own calls, even though `fetch_daily.py` itself never
+exceeds 4/sec. This is timing-dependent, not deterministic — a run can succeed cleanly
+one day and hit rejections the next with no code or config change, purely because the
+1-minute fetch window happened to overlap another poller's own burst. See
+`bug_fetch_daily_dh904_rate_limit_contention` in project memory for the incident that
+surfaced this.
+
+**Fix (2026-08-19): `fetch_one()` now retries up to 3 times (1s backoff) on any
+non-success response, and logs Dhan's actual `remarks`/`data` on each failed attempt
+and on final give-up** — previously a rejection (rate-limit or otherwise) silently
+became `None` → `— FAILED` with zero diagnostic info. This self-heals the common
+rate-limit-contention case (confirmed live: every retried symbol from a real
+90-failure run succeeded on attempt 2) without needing a cross-process rate
+coordinator. A symbol that still fails after 3 attempts is a genuine problem worth a
+closer look — re-run `fetch_daily.py --symbol SYMBOL --force` standalone once
+contention has cleared, or check the printed error for a different root cause (bad
+security_id, auth, etc.).
+
 ---
 
 ## Using Data in a Backtest
