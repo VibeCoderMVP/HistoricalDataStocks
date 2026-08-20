@@ -353,13 +353,21 @@ subprocess.run(["uv", "run", "--project", "D:/Trading/HistoricalDataStocks",
   a full overwrite of each symbol's file with only the freshly-fetched `today - 5yrs` to `today`
   range, no merge with whatever was there before. Anything older than 5 years back silently
   drops out of this store as time passes. This is fine for HDS's own direct consumers (5yr is
-  the documented lookback everywhere), but matters for `trading_core.daily_bars.DailyBarStore`
-  (`daily_bars.duckdb`), which treats this parquet as an authoritative daily-TF overlay run
-  fresh every day (see `trading_core/CLAUDE.md`'s "Daily Bars Store" section) — that consumer
-  only ever upserts, never deletes, so its own history keeps accumulating past 5 years even as
-  this store's own rolling window moves forward; data older than 5 years simply stops being
-  re-verified/re-adjusted against Dhan going forward (it was already correctly adjusted while it
-  was still in-window, so this is a boundary to be aware of, not an active risk).
+  the documented lookback everywhere), but used to matter for `trading_core.daily_bars.
+  DailyBarStore` (`daily_bars.duckdb`), which treats this parquet as an authoritative daily-TF
+  overlay run fresh every day (see `trading_core/CLAUDE.md`'s "Daily Bars Store" section) —
+  that consumer previously only ever upserted, never deleted, so its own history kept
+  accumulating past 5 years even as this store's own rolling window moved forward. **This was
+  wrong, not benign** (fixed 2026-08-20, see `bug_daily_bars_rolling_window_split_boundary`,
+  memory): a bar that ages out of THIS store's window is never re-fetched/re-adjusted again, so
+  if a symbol's split ex-date falls after one of its old bars has already aged out of this
+  parquet, `daily_bars.duckdb`'s copy of that old bar was frozen on the pre-split scale
+  permanently, with no code path left to fix it — confirmed live (6,898 already-orphaned rows
+  across 182 symbols existed at fix time). `trading_core.daily_bars.backfill_from_hds()` now
+  purges any of its own rows older than this store's current window floor on every run, so
+  `daily_bars.duckdb` stays correctly bounded to this rolling ~5yr window going forward — any
+  backtest wanting deeper daily history than that needs its own separately-sourced dataset, not
+  an assumption that the shared store still has it.
 
 ---
 
