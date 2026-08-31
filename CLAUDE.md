@@ -16,7 +16,8 @@ A self-contained data pipeline for Nifty 200 equity OHLCV history:
 | **5min** | Dhan `intraday_minute_data` (interval=5) | 5 years in 88-day chunks | `data/5min/{SYMBOL}.parquet` |
 | **1min** | Dhan `intraday_minute_data` (interval=1) | 5 years in 88-day chunks (confirmed live 2026-07-11) | `data/1min/{SYMBOL}.parquet` |
 | **Any other TF** | Rolled from 5min | Same as 5min | Not stored — computed on demand |
-| **Sector indices (5min)** | Dhan `intraday_minute_data`, `exchange_segment=IDX_I` | 5 years where available (see below) | `data/sector_5min/{SECTOR_NAME}.parquet` |
+| **Sector indices (5min)** | Dhan `intraday_minute_data`, `exchange_segment=IDX_I` | 5 years where available, most back to 2021-08 (see below) | `data/sector_5min/{SECTOR_NAME}.parquet` |
+| **Sector indices (daily)** | Dhan `historical_daily_data`, `exchange_segment=IDX_I` | 2021-08-31 onward for most; a few from 2023-07 (see below) | `data/sector_daily/{SECTOR_NAME}.parquet` |
 
 Derived TFs (15min, 25min, 75min, 125min, or any N that is a multiple of 5) are
 computed by `rollup.py` with session-based bin anchoring at 09:15 IST. No separate
@@ -293,6 +294,23 @@ SERVICES proxy — see caveat below) under `SEM_EXCH_INSTRUMENT_TYPE=INDEX`,
   — this is historical-only, offline-backtest infrastructure so far. See
   `reference_dhan_sector_index_data` and `reference_dhan_premarket_data` in
   project memory for the live/pre-market research thread if picking this up.
+
+**Daily added 2026-08-31** (`fetch_sector_daily.py`, sibling to `fetch_index_daily.py` but
+reads `SECTOR_INDICES` instead of `BROAD_INDICES`) → `data/sector_daily/{SECTOR_NAME}.parquet`,
+one `historical_daily_data()` call per sector, no chunking needed (unlike the 5min endpoint's
+90-day window limit). **Daily history goes back further than 5min for some sectors** — e.g.
+NIFTY CONSUMER DURABLES and NIFTY OIL AND GAS have full 2021-08-31 daily history despite only
+having 5min data from 2024 onward; Dhan's daily endpoint isn't bound by the same per-index
+history-start limit as the 5min intraday one. Live-side counterpart:
+`trading_core.sector_daily_bars.SectorDailyBarStore` (`data/sector_daily_bars.db`, backfill-only,
+no live poller — see `trading_core/CLAUDE.md`'s own entry).
+
+**5min store found stale 2026-08-31** (last refreshed at its original 2026-07-12 build) — the
+same session's sector-data audit found `TradingWebSockets/rest_candle_service.py`'s live sector
+poll paused (`POLL_SECTORS=0` since PR-04, no live consumer) and this offline parquet never
+re-run since. Caught up via `fetch_sector_5min.py --refresh`, now current through today; also
+found the real per-index 5min history-start is 2021-08-04 for most sectors, not just ~5yr as
+originally documented.
 
 **Extending coverage**: the same instrument-master CSV has ~100 more niche/
 strategy indices (NIFTY INFRA, NIFTYPSE, NIFTY COMMODITIES, etc.) that could
