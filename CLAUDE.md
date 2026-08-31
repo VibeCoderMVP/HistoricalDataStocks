@@ -35,6 +35,9 @@ HistoricalDataStocks/
 ├── fetch_5min.py     — Download 5yr 5min OHLCV (88-day chunks, resume-safe)
 ├── fetch_1min.py     — Download 5yr 1min OHLCV (88-day chunks, resume-safe)
 ├── fetch_sector_5min.py — Download 5yr 5min OHLCV for NSE sector indices (IDX_I segment)
+├── fetch_sector_daily.py — Download daily OHLC for NSE sector indices (IDX_I segment)
+├── fetch_sector_membership.py — Refresh sector_membership.json from NSE's constituent CSVs
+├── sector_membership.json — symbol -> [sector(s)] map (relocated here 2026-08-31)
 ├── rollup.py         — Resample 5min to any N-min TF; session-aligned to 09:15 IST
 ├── query.py          — Public API: daily(), intraday(), universe_daily(), to_csv()
 ├── pyproject.toml    — uv-managed dependencies
@@ -43,6 +46,7 @@ HistoricalDataStocks/
 └── data/
     ├── daily/        — {SYMBOL}.parquet  (~200 files, ~50 MB)
     ├── sector_5min/  — {SECTOR_NAME}.parquet (13 files, e.g. "NIFTY IT.parquet")
+    ├── sector_daily/ — {SECTOR_NAME}.parquet (13 files)
     ├── 5min/         — {SYMBOL}.parquet  (~200 files, ~2-3 GB)
     └── 1min/         — {SYMBOL}.parquet  (~200 files, ~1.5-2 GB est.)
 ```
@@ -268,17 +272,34 @@ SERVICES proxy — see caveat below) under `SEM_EXCH_INSTRUMENT_TYPE=INDEX`,
   from the OHLC above) comes from NSE's public archive, NOT from Dhan:
   `https://nsearchives.nseindia.com/content/indices/ind_<name>list.csv`, same
   fetch pattern already used once in this repo for `DC-Separate/symbols/
-  niftynext50.txt`. The parsed symbol→sector(s) map lives in
-  `D:\Trading\backtesting\GapDC-Test\symbols\sector_membership.json` (project-
-  local, not here, since only that project has consumed it so far — move it
-  here if a second project needs the same mapping). Covers 115 of this
-  project's 200 universe symbols; the other 85 (industrials, telecom, power,
-  cement, AMCs, new listings) aren't part of any of these 13 sectors.
+  niftynext50.txt`. **Relocated here 2026-08-31** (was
+  `D:\Trading\backtesting\GapDC-Test\symbols\sector_membership.json`,
+  project-local — moved once a second consumer, the daily/5min sector bar
+  store work, needed the same mapping, per the original file's own "move it
+  here if a second project needs it" comment). New
+  `fetch_sector_membership.py` (this repo) rebuilds `sector_membership.json`
+  (also this repo, sibling to `instruments.py`) from NSE's live CSVs and
+  reports drift against the current `symbols/nifty200.txt` universe in the
+  same run (`--check-only` to just report, not write) — `GapDC-Test/
+  sector_correlation.py` now reads this repo's copy directly, not its own.
+  As of the 2026-08-31 refresh: covers 115 of the 200 universe symbols; 85 are
+  uncovered (industrials, telecom, power, cement, AMCs, new listings — not
+  part of any of these 13 sectors) and 48 rows are stale (mapped symbols no
+  longer in the current universe, e.g. delisted/renamed/replaced) — same
+  counts as the original 2026-07-12 fetch, confirming NSE's own constituent
+  lists genuinely haven't been revised since then (their own reconstitution
+  reviews are periodic, not continuous — re-run this script periodically,
+  it won't self-trigger). **A same-day refresh does not make a brand-new IPO
+  sector-correct instantly** — e.g. HYUNDAI (an auto company) still shows as
+  uncovered as of this refresh, because NSE's own NIFTY AUTO constituent list
+  predates its listing; that only resolves at NSE's next reconstitution
+  review, not by refreshing this script sooner.
   **Filename gotchas** (NSE's URLs aren't perfectly systematic): financial
   services is `ind_niftyfinancelist.csv`, NOT `ind_niftyfinancialserviceslist.csv`;
   `ind_niftyprivatebanklist.csv` does not exist as a standalone file (private
-  banks are folded into `ind_niftybanklist.csv`). Verify with an HTTP status
-  check before assuming a guessed filename works.
+  banks are folded into `ind_niftybanklist.csv`). `fetch_sector_membership.py`
+  tries a candidate-slug list per sector and verifies each response actually
+  has a `Symbol` column before trusting it — never guesses blind.
 - **Caveat — "NIFTY FINANCIAL SERVICES" name mismatch**: Dhan does not expose
   the classic full Financial Services index under that name in `IDX_I`. `NIFTY
   FINSRV25 50` (security_id 469, a newer 25/50-stock derivatives-linked variant)

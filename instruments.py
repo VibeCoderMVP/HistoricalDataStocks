@@ -65,7 +65,8 @@ NIFTY_200: dict[str, str] = {
 # SEM_EXM_EXCH_ID=NSE, SEM_SEGMENT=I). Constituent membership for these comes from
 # NSE's public archive CSVs (https://nsearchives.nseindia.com/content/indices/
 # ind_<name>list.csv), same fetch pattern as DC-Separate's niftynext50.txt -- see
-# GapDC-Test/symbols/sector_membership.json for that mapping.
+# fetch_sector_membership.py / sector_membership.json (this repo, relocated
+# 2026-08-31 from GapDC-Test once a second consumer needed it) for that mapping.
 #
 # NOTE on "NIFTY FINANCIAL SERVICES": Dhan does not expose the classic full
 # Financial Services index under that name -- "NIFTY FINSRV25 50" (a newer
