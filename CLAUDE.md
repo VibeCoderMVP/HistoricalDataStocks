@@ -258,10 +258,11 @@ scrip) dropped → 500 real names, 300 new vs Nifty200.
 - Tier tagging: `HurdleCheck/nifty500_symbols.csv` + `load_tiers()` adds an `SMCS` tier
   (Nifty500 − Nifty200, ~300); `PnF_Charts/config/universes.json` got a `nifty_500` set.
 
-**5min TF: NOT done** — deferred by the user 2026-09-08. Blocked on
-`bug_hds_5min_daily_split_adjustment_mismatch` (the 5min store is NOT split-adjusted at all);
-expanding it to Nifty500 needs the source-level intraday adjustment fix first, not a bigger
-exclude list. `fetch_5min.py` has no `--nifty500` flag yet.
+**5min TF: NOT done** — deferred by the user 2026-09-08. The blocker
+(`bug_hds_5min_daily_split_adjustment_mismatch`) is fixed on read since 2026-10-26 (see
+"Intraday Corporate-Action Adjustment"); a Nifty500 5min fetch would also need
+`build_intraday_adjustment.py` re-run over the new symbols. `fetch_5min.py` has no
+`--nifty500` flag yet.
 
 ---
 
@@ -427,7 +428,7 @@ df = apply_intraday_adjustment(df, symbol="360ONE", tf="5min")  # tf="1min" for 
 
 - **Nifty 500:** Daily TF built 2026-09-08 (`instruments.py::NIFTY_500`, `data/daily/` now 500
   files, split-adjustment verified — see "Nifty 500" section above). 5min/1min TF still Nifty 200
-  only (deferred; blocked on the intraday split-adjustment fix).
+  only (deferred by the user; the intraday split-adjustment blocker is fixed on read since 2026-10-26).
 - **Corporate actions:** the **daily** store IS split/bonus-adjusted throughout its history
   (confirmed 2026-07-26 against NSE's real corporate-action ex-dates via
   `fetch_corporate_actions.py` — no price discontinuity at any confirmed split/bonus date).
