@@ -368,6 +368,43 @@ subprocess.run(["uv", "run", "--project", "D:/Trading/HistoricalDataStocks",
 
 ---
 
+## Intraday Corporate-Action Adjustment (added 2026-10-26)
+
+Fix for `bug_hds_5min_daily_split_adjustment_mismatch` (SEV1). The intraday parquet is left
+untouched (raw ingest target); a per-session **factor table** puts it on the daily store's
+adjusted scale, applied on read:
+
+```python
+sys.path.insert(0, "D:/Trading/HistoricalDataStocks")
+from query import intraday
+df = intraday("360ONE", minutes=125, adjusted=True)          # via query.py
+from intraday_adjust import apply_intraday_adjustment          # or on any frame you loaded
+df = apply_intraday_adjustment(df, symbol="360ONE", tf="5min")  # tf="1min" for 1min data
+```
+
+- **Why reconcile to daily, not apply NSE ratios:** the "raw" intraday is not consistently raw —
+  Dhan returned some events already adjusted at fetch time (RELIANCE 2024 bonus, POWERGRID 2021
+  bonus) and others not (360ONE, IOC, SRF...). `factor = daily_high / intraday_high` per session
+  (+1-day daily date fix), constant within a corporate-action segment (e.g. 360ONE 0.25000,
+  BSE 0.33333, IOC 0.66667, ITC demerger 0.94600). Boundaries land on the NSE ex-date.
+- Sessions before the daily store's first date (2021-06-28..10-26) use NSE ratios from
+  `confirmed_splits.json`, only where the stored bars show the unadjusted jump (SRF, APLAPOLLO).
+- **Rebuild after every 5min/1min refresh that crosses a new corporate action:**
+  `.venv/Scripts/python.exe build_intraday_adjustment.py --tf 5min` (and `--tf 1min`), then
+  `validate_intraday_adjustment.py --tf 5min`. Output: `data/intraday_adjustment_<tf>.parquet`
+  (+ `_segments.csv` audit, `_validation.csv`). Sessions newer than the table get factor 1.0.
+- Validated 2026-10-26: daily/intraday ratio spread >1.3x went 8 symbols -> 1 (MOTHERSON); 71/78
+  NSE events clean after adjustment; 360ONE's remaining +10.47% bonus-day gap equals Kite's
+  independently adjusted gap (a real move). 125min rollup-then-adjust == precomputed-then-adjust.
+- **Still excluded:** MOTHERSON (corrupt daily reference -> not in the table). NMDC 2022-10-27
+  and GMRAIRPORT 2022-01-11 demergers are unadjusted in the *daily* store too, so both stores
+  agree but the price series carries the demerger gap.
+- Volume is not adjusted (daily volume isn't either). Default `adjusted=False` keeps existing
+  callers unchanged — consumers must opt in and can then drop the 11+5 symbol exclusions
+  (except MOTHERSON).
+
+---
+
 ## Known Limitations
 
 - **Nifty 500:** Not yet built. Only Nifty 200 (from `TradingWebSockets/config/settings.py` NIFTY_200_SECURITY_MAP).
@@ -378,6 +415,7 @@ subprocess.run(["uv", "run", "--project", "D:/Trading/HistoricalDataStocks",
   corporate action — see `bug_hds_5min_daily_split_adjustment_mismatch` in project memory.
   Any backtest that mixes a daily/longer-TF structural signal with an intraday execution
   clock is exposed to this; a pure daily-TF backtest is not.
+  **Fixed on read since 2026-10-26** — see "Intraday Corporate-Action Adjustment" above.
 - **MOTHERSON daily data is corrupted — excluded by default, do not re-add:** 704 duplicate-date
   rows (57% of its history) at two conflicting price scales ~1.35x apart. Not worth fixing
   (one symbol out of 200 doesn't materially change a universe-level backtest decision).

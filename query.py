@@ -120,16 +120,22 @@ def intraday(
     minutes: int = 5,
     from_date: str | None = None,
     to_date: str | None = None,
+    adjusted: bool = False,
 ) -> pd.DataFrame:
     """
     Load intraday OHLCV for one symbol.
     minutes=5  → raw 5min bars (IST-indexed)
     minutes=N  → rolled up to N-min bars (N must be multiple of 5)
     Volume is always summed correctly in rollups.
+    adjusted=True → OHLC put on the daily store's corporate-action-adjusted scale
+    (intraday_adjust.py; fixes bug_hds_5min_daily_split_adjustment_mismatch). Default False
+    keeps existing callers' behaviour unchanged. MOTHERSON is not adjustable — keep excluding it.
     """
-    if minutes == 5:
-        return load_5min(symbol, from_date, to_date)
-    return rollup(symbol, minutes, from_date, to_date)
+    df = load_5min(symbol, from_date, to_date) if minutes == 5 else rollup(symbol, minutes, from_date, to_date)
+    if adjusted:
+        from intraday_adjust import apply_intraday_adjustment
+        df = apply_intraday_adjustment(df, symbol=symbol, tf="5min")
+    return df
 
 
 # ── Export ───────────────────────────────────────────────────────────────────
