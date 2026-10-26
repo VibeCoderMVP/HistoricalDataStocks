@@ -37,7 +37,7 @@ truststore.inject_into_ssl()
 from dhanhq import DhanContext, dhanhq
 from dotenv import load_dotenv
 
-from instruments import NIFTY_200
+from instruments import NIFTY_200, NIFTY_500
 
 DATA_DIR = Path(__file__).parent / "data" / "daily"
 ENV_PATH = Path("D:/Trading/TradingWebSockets/.env")
@@ -48,6 +48,19 @@ def _client() -> dhanhq:
     load_dotenv(dotenv_path=ENV_PATH)
     ctx = DhanContext(os.environ["DHAN_CLIENT_ID"], os.environ["DHAN_ACCESS_TOKEN"])
     return dhanhq(ctx)
+
+
+class DhanNoDataAccess(RuntimeError):
+    """DH-902: the account isn't entitled to Data APIs (e.g. "requires a PLUS subscription.
+    Current plan: FREE"). Account-level and permanent for this run, so every symbol would
+    fail identically -- retrying wastes ~10 min (bug_ingest_daily_bars_dhan_data_api_subscription_lapsed)."""
+
+
+def _is_dh902(r: dict) -> bool:
+    remarks = r.get("remarks")
+    if isinstance(remarks, dict):
+        return remarks.get("error_code") == "DH-902"
+    return "DH-902" in str(remarks) or "DH-902" in str(r.get("data"))
 
 
 def fetch_one(
@@ -68,6 +81,8 @@ def fetch_one(
         )
         if r.get("status") == "success" and isinstance(r.get("data"), dict):
             break
+        if _is_dh902(r):
+            raise DhanNoDataAccess(str(r.get("remarks") or r.get("data")))
         if attempt < retries:
             print(f"    {symbol}: attempt {attempt}/{retries} failed "
                   f"({r.get('remarks') or r.get('data')}) — retrying...")
@@ -102,7 +117,15 @@ def main(symbols: dict[str, str] | None = None, years: int = 5, force: bool = Fa
         if out.exists() and not force:
             print(f"[{i:3d}/{total}] {symbol:16s} — exists, skip  (--force to refetch)")
             continue
-        df = fetch_one(client, symbol, sec_id, years)
+        try:
+            df = fetch_one(client, symbol, sec_id, years)
+        except DhanNoDataAccess as e:
+            print(f"[{i:3d}/{total}] {symbol:16s} — DH-902, aborting the Dhan fetch for ALL symbols:")
+            print(f"    {e}")
+            print("    Account has no Dhan Data API access -- every symbol would fail the same way.")
+            print("    Check the plan at Dhan Web > My Profile > DhanHQ APIs. 0 files updated;")
+            print("    the bhavcopy step still provides today's (split-UNadjusted) daily bars.")
+            sys.exit(2)
         if df is not None and not df.empty:
             df.to_parquet(out, index=False)
             print(f"[{i:3d}/{total}] {symbol:16s} - {len(df):4d} bars  ({df['date'].min().date()} to {df['date'].max().date()})")
@@ -121,10 +144,14 @@ if __name__ == "__main__":
     parser.add_argument("--symbol", help="Single symbol (e.g. RELIANCE)")
     parser.add_argument("--years", type=int, default=5, help="Years of history (default 5)")
     parser.add_argument("--force", action="store_true", help="Re-fetch even if file exists")
+    parser.add_argument("--nifty500", action="store_true",
+                        help="Use the full NIFTY_500 universe (existing files skipped unless --force)")
     args = parser.parse_args()
 
-    syms = {args.symbol: NIFTY_200[args.symbol]} if args.symbol else None
-    if args.symbol and args.symbol not in NIFTY_200:
-        print(f"ERROR: {args.symbol} not in NIFTY_200 map in instruments.py")
+    base_map = NIFTY_500 if args.nifty500 else NIFTY_200
+    syms = {args.symbol: base_map[args.symbol]} if args.symbol else (
+        NIFTY_500 if args.nifty500 else None)
+    if args.symbol and args.symbol not in base_map:
+        print(f"ERROR: {args.symbol} not in {'NIFTY_500' if args.nifty500 else 'NIFTY_200'} map in instruments.py")
         sys.exit(1)
     main(symbols=syms, years=args.years, force=args.force)

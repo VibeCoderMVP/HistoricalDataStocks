@@ -236,14 +236,32 @@ uv run python D:/Trading/renew_token.py --force-new
 
 ---
 
-## Adding Nifty 500
+## Nifty 500
 
-When Nifty 500 coverage is needed:
-1. Download the Dhan instruments CSV (same as `NiftyOptionsBacktest/src/dhan_instruments.py` but for `NSE_EQ` segment)
-2. Filter to the 500 symbols and add to `instruments.py` as `NIFTY_500: dict[str, str]`
-3. Create `symbols/nifty500.txt`
-4. Pass `NIFTY_500` to `fetch_daily.py` and `fetch_5min.py` instead of `NIFTY_200`
-5. `data/daily/` and `data/5min/` are flat directories — they absorb Nifty 500 naturally
+**Daily TF: DONE (2026-09-08).** `instruments.py::NIFTY_500` (500 symbols, superset of
+`NIFTY_200` with identical ids) built from NSE `ind_nifty500list.csv`
+(`symbols/ind_nifty500list.csv`) matched against `trading_core/data/dhan_instruments_master.csv`
+(NSE / EQUITY / EQ|BE series). `symbols/nifty500.txt` written. `DUMMYHEG` (an NSE placeholder
+scrip) dropped → 500 real names, 300 new vs Nifty200.
+
+- Fetch: `uv run python fetch_daily.py --nifty500` (existing 200 files skipped unless `--force`).
+  All 300 new fetched clean, 0 failures; 222 have full ~5yr history, 78 are recent IPOs with
+  shorter history (expected).
+- **Split-adjustment verified**: Dhan's `historical_daily_data` back-adjusts the mid-cap daily
+  series exactly as it does large-caps — 64 split/bonus events across 55 of the new 300,
+  cross-checked against NSE's own corporate-actions feed (`data/corporate_actions_raw.parquet`),
+  every one shows a normal price transition across the ex-date, none shows the split ratio.
+  A pure daily-TF backtest on the full Nifty500 is safe.
+- Downstream: `trading_core.daily_bars.backfill_from_hds()` globs all `data/daily/*.parquet`, so
+  `python -m trading_core.daily_bars backfill-hds <dir>` picks up all 500 with no code change —
+  done, DailyBarStore now has full 5yr for the new 300.
+- Tier tagging: `HurdleCheck/nifty500_symbols.csv` + `load_tiers()` adds an `SMCS` tier
+  (Nifty500 − Nifty200, ~300); `PnF_Charts/config/universes.json` got a `nifty_500` set.
+
+**5min TF: NOT done** — deferred by the user 2026-09-08. Blocked on
+`bug_hds_5min_daily_split_adjustment_mismatch` (the 5min store is NOT split-adjusted at all);
+expanding it to Nifty500 needs the source-level intraday adjustment fix first, not a bigger
+exclude list. `fetch_5min.py` has no `--nifty500` flag yet.
 
 ---
 
@@ -407,7 +425,9 @@ df = apply_intraday_adjustment(df, symbol="360ONE", tf="5min")  # tf="1min" for 
 
 ## Known Limitations
 
-- **Nifty 500:** Not yet built. Only Nifty 200 (from `TradingWebSockets/config/settings.py` NIFTY_200_SECURITY_MAP).
+- **Nifty 500:** Daily TF built 2026-09-08 (`instruments.py::NIFTY_500`, `data/daily/` now 500
+  files, split-adjustment verified — see "Nifty 500" section above). 5min/1min TF still Nifty 200
+  only (deferred; blocked on the intraday split-adjustment fix).
 - **Corporate actions:** the **daily** store IS split/bonus-adjusted throughout its history
   (confirmed 2026-07-26 against NSE's real corporate-action ex-dates via
   `fetch_corporate_actions.py` — no price discontinuity at any confirmed split/bonus date).
