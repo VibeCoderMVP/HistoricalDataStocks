@@ -255,6 +255,9 @@ scrip) dropped → 500 real names, 300 new vs Nifty200.
 - Downstream: `trading_core.daily_bars.backfill_from_hds()` globs all `data/daily/*.parquet`, so
   `python -m trading_core.daily_bars backfill-hds <dir>` picks up all 500 with no code change —
   done, DailyBarStore now has full 5yr for the new 300.
+- **Refreshed nightly since 2026-11-10**: `trading_core\INGEST_DAILY_BARS.bat` runs
+  `fetch_daily.py --force --nifty500`. Before that only the Nifty 200 was refreshed, so the
+  other 300 files stopped at 2026-09-08.
 - Tier tagging: `HurdleCheck/nifty500_symbols.csv` + `load_tiers()` adds an `SMCS` tier
   (Nifty500 − Nifty200, ~300); `PnF_Charts/config/universes.json` got a `nifty_500` set.
 
